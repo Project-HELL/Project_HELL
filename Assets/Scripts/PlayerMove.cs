@@ -31,8 +31,10 @@ public class PlayerMove : MonoBehaviour
         }
 
         // Direction Sprite
-        if(Input.GetButtonDown("Horizontal"))
-            spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == -1;
+        if (rigid.velocity.x < 0)
+            spriteRenderer.flipX = true;
+        else
+            spriteRenderer.flipX = false;
 
         // Animation
         if (Mathf.Abs(rigid.velocity.x) < 0.3)
