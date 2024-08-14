@@ -9,51 +9,56 @@ public class PlayerMove : MonoBehaviour
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     Animator anim;
+
+    GrappleHook grappleHook;
+
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+
+        grappleHook = GetComponent<GrappleHook>();
     }
+
     void Update()
     {
-        // Jump
+        if (grappleHook.isGrappling) return;
+
         if (Input.GetButtonDown("Jump") && !anim.GetBool("isJumping"))
         {
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             anim.SetBool("isJumping", true);
         }
 
-        // Stop Speed
         if (Input.GetButtonUp("Horizontal"))
         {
             rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
         }
 
-        // Direction Sprite
         if (rigid.velocity.x < 0)
             spriteRenderer.flipX = true;
         else
             spriteRenderer.flipX = false;
 
-        // Animation
         if (Mathf.Abs(rigid.velocity.x) < 0.3)
             anim.SetBool("isRunning", false);
         else
             anim.SetBool("isRunning", true);
     }
+
     void FixedUpdate()
     {
-        // Move By Key Control
+        if (grappleHook.isGrappling) return;
+
         float h = Input.GetAxisRaw("Horizontal");
         rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
 
-        if (rigid.velocity.x > maxSpeed) // Right Max Speed
+        if (rigid.velocity.x > maxSpeed)
             rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
-        else if (rigid.velocity.x < maxSpeed * (-1)) // Left Max Speed
+        else if (rigid.velocity.x < maxSpeed * (-1))
             rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
 
-        // Landing Platform
         if (rigid.velocity.y < 0)
         {
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
