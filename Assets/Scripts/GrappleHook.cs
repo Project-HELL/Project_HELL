@@ -25,8 +25,10 @@ public class GrappleHook : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
+
         line = GetComponent<LineRenderer>();
         line.enabled = false;
+        
         originGravity = rigid.gravityScale;
     }
 
