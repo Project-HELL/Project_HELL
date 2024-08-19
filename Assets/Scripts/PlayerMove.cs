@@ -6,70 +6,66 @@ public class PlayerMove : MonoBehaviour
 {
     public float maxSpeed;
     public float jumpPower;
-    Rigidbody2D rigid;
-    SpriteRenderer spriteRenderer;
-    Animator anim;
+    public float minX = -9.1f;
+    public float maxX = 9f;
 
-    GrappleHook grappleHook;
+    private Rigidbody2D rigid;
+    private SpriteRenderer spriteRenderer;
+    private Animator anim;
+    private GrappleHook grappleHook;
+    private Vector2 velocity = Vector2.zero;
+    private float horizontalInput;
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-
         grappleHook = GetComponent<GrappleHook>();
     }
 
     void Update()
     {
-        if (grappleHook.isGrappling) return;
+        if (grappleHook.isGrappling)
+        {
+            anim.SetBool("isRunning", false);
+            return;
+        }
 
-        if (Input.GetButtonDown("Jump") && !anim.GetBool("isJumping"))
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
             anim.SetBool("isJumping", true);
         }
 
-        if (Input.GetButtonUp("Horizontal"))
+        if (horizontalInput != 0)
         {
-            rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
+            spriteRenderer.flipX = horizontalInput > 0;
         }
-
-        if (rigid.velocity.x < 0)
-            spriteRenderer.flipX = true;
-        else
-            spriteRenderer.flipX = false;
-
-        if (Mathf.Abs(rigid.velocity.x) < 0.3)
-            anim.SetBool("isRunning", false);
-        else
-            anim.SetBool("isRunning", true);
+        anim.SetBool("isRunning", Mathf.Abs(horizontalInput) > 0);
     }
 
     void FixedUpdate()
     {
         if (grappleHook.isGrappling) return;
 
-        float h = Input.GetAxisRaw("Horizontal");
-        rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
+        Vector2 targetVelocity = new Vector2(horizontalInput * maxSpeed, rigid.velocity.y);
+        rigid.velocity = Vector2.SmoothDamp(rigid.velocity, targetVelocity, ref velocity, 0.1f);
 
-        if (rigid.velocity.x > maxSpeed)
-            rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
-        else if (rigid.velocity.x < maxSpeed * (-1))
-            rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
+        Vector2 clampedPosition = new Vector2(Mathf.Clamp(transform.position.x, minX, maxX), transform.position.y);
+        transform.position = clampedPosition;
 
-        if (rigid.velocity.y < 0)
+        if (rigid.velocity.y < 0 && IsGrounded())
         {
-            Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
-
-            RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
-
-            if (rayHit.collider != null)
-            {
-                if (rayHit.distance < 0.5f)
-                    anim.SetBool("isJumping", false);
-            }
+            anim.SetBool("isJumping", false);
         }
+    }
+
+    private bool IsGrounded()
+    {
+        RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector2.down, 1f, LayerMask.GetMask("Grapplable", "Platform"));
+        return rayHit.collider != null;
     }
 }
