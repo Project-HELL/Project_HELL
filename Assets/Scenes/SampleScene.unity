@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 278796366}
   - component: {fileID: 278796365}
   - component: {fileID: 278796364}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Grapplable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2692,6 +2692,7 @@ GameObject:
   - component: {fileID: 722482141}
   - component: {fileID: 722482140}
   - component: {fileID: 722482145}
+  - component: {fileID: 722482146}
   m_Layer: 0
   m_Name: Tracking monster
   m_TagString: Untagged
@@ -2856,17 +2857,28 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 722482139}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b242607ee6e4b2498f0af37f903a433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   moveSpeed: 4.5
-  delayBeforeMove: 1
-  yCoordinateTolerance: 1
-  xCoordinateDistance: 5
-  pursuitDuration: 2
+  attackDamage: 1
+--- !u!114 &722482146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 722482139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eccd2c1d3d358d4eb2a1dcff140ae58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  attackDamage: 1
+  isMoveNegative: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
