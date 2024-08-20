@@ -34,8 +34,6 @@ public abstract class EntityBase : MonoBehaviour {
         if (!(this is Falldownable)) {
             RaycastHit2D hit = Physics2D.Raycast(movePos, Vector2.down, 1f, LayerMask.GetMask("Platform"));
             Debug.DrawRay(movePos, Vector2.down * 1f);
-            Debug.Log(movePos);
-            Debug.Log(hit.collider);
             
             if (hit.collider == null) {
                 isMoveBlockedBefore = true;
