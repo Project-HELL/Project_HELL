@@ -1,10 +1,12 @@
 using System.Security.Cryptography.X509Certificates;
 using UnityEditor;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public abstract class EntityBase : MonoBehaviour {
 
     Rigidbody2D rigid;
+    SpriteRenderer sprite;
 
     public float moveSpeed = 10f;
     public float attackDamage = 1f;
@@ -15,6 +17,7 @@ public abstract class EntityBase : MonoBehaviour {
 
     private void Awake() {
         rigid = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     // 기본적으로 닿으면 공격당함.
@@ -24,6 +27,11 @@ public abstract class EntityBase : MonoBehaviour {
         } else {
             // Default Attack logic
         }
+    }
+
+    // if you want, you can override it.
+    public void SetFlipX(bool isFlip) {
+        sprite.flipX = isFlip;
     }
 
     private void Update() {
