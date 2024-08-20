@@ -2542,7 +2542,7 @@ MonoBehaviour:
   grappleMoveSpeed: 10
   grappleShootSpeed: 7
   climbSpeed: 10
-  isGrappling: 1
+  isGrappling: 0
 --- !u!70 &695949411
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
