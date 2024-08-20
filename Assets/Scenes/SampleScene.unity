@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 278796364}
   m_Layer: 6
   m_Name: Grapplable
-  m_TagString: Untagged
+  m_TagString: Grapplable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1302,9 +1302,9 @@ GameObject:
   - component: {fileID: 318353161}
   - component: {fileID: 318353160}
   - component: {fileID: 318353165}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Bone
-  m_TagString: Untagged
+  m_TagString: Grapplable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1853,7 +1853,7 @@ Transform:
   m_GameObject: {fileID: 393512719}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 15, z: 0}
+  m_LocalPosition: {x: 0, y: 15, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2383,7 +2383,7 @@ GameObject:
   - component: {fileID: 695949407}
   - component: {fileID: 695949408}
   - component: {fileID: 695949409}
-  - component: {fileID: 695949410}
+  - component: {fileID: 695949412}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2534,14 +2534,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 342c6a31f85ef3049aee564e4f36b32a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grapplableMask:
+  line: {fileID: 695949412}
+  platformMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 64
   maxDistance: 5
-  grappleSpeed: 7
+  grappleMoveSpeed: 10
   grappleShootSpeed: 7
   climbSpeed: 10
---- !u!120 &695949410
+  isGrappling: 1
+--- !u!70 &695949411
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695949402}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.29, y: -0.4}
+  m_Size: {x: 3, y: 3.9}
+  m_Direction: 0
+--- !u!120 &695949412
 LineRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
@@ -2562,7 +2599,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2583,10 +2620,12 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Positions: []
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.05
+    widthMultiplier: 0.099596575
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -2643,41 +2682,6 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!70 &695949411
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 695949402}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.29, y: -0.4}
-  m_Size: {x: 3, y: 3.9}
-  m_Direction: 0
 --- !u!1 &722482139
 GameObject:
   m_ObjectHideFlags: 0
@@ -2694,7 +2698,7 @@ GameObject:
   - component: {fileID: 722482145}
   - component: {fileID: 722482146}
   m_Layer: 0
-  m_Name: Tracking monster
+  m_Name: Round monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
