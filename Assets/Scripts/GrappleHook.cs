@@ -24,12 +24,18 @@ public class GrappleHook : MonoBehaviour
 
     [HideInInspector] public bool isGrappling = false;
 
+
+    Rigidbody2D rigid;
+    float originGravity;
+
     Vector2 target;
     float grappleStartedTime = 0f;
 
+
     private void Awake()
     {
-        
+        rigid = GetComponent<Rigidbody2D>();
+        originGravity = rigid.gravityScale;
     }
 
     private void Update()
@@ -47,18 +53,31 @@ public class GrappleHook : MonoBehaviour
 
         if (isGrappling) {
             grappleStartedTime += Time.deltaTime / grappleShootSpeed;
+            rigid.gravityScale = 0;
 
             line.SetPosition(0, playerPos);
             line.SetPosition(1, target);
 
-            gameObject.transform.position = Vector3.Lerp(playerPos, target, grappleStartedTime);
+            // gameObject.transform.position = Vector3.Lerp(playerPos, target, grappleStartedTime);
+            // rigid.velocity = (target - (Vector2)playerPos).normalized * (/*Vector2.Distance(playerPos, target) * */grappleMoveSpeed + 1);
+            rigid.AddForce((target - (Vector2)playerPos).normalized * grappleMoveSpeed * (grappleStartedTime + 1));
 
-            if (Vector2.Distance(playerPos, target) < 0.5f) {
-                // TODO: 수정예정.
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 0.5f, platformMask);
+            Debug.DrawRay(transform.position, Vector2.up * 0.5f);
+            Debug.Log(hit.collider);
+            if (hit.collider != null) {
                 isGrappling = false;
                 line.enabled = false;
                 gameObject.transform.position = playerPos + Vector3.up * 1.5f;
             }
+
+            // if (Vector2.Distance(playerPos, target) < 0.5f) {
+            //     isGrappling = false;
+            //     line.enabled = false;
+            //     gameObject.transform.position = playerPos + Vector3.up * 1.5f;
+            // }
+        } else {
+            rigid.gravityScale = originGravity;
         }
     }
 

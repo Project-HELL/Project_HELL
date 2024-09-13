@@ -49,7 +49,7 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (grappleHook.isGrappling) return;
+        //if (grappleHook.isGrappling) return;
 
         Vector2 targetVelocity = new Vector2(horizontalInput * maxSpeed, rigid.velocity.y);
         rigid.velocity = Vector2.SmoothDamp(rigid.velocity, targetVelocity, ref velocity, 0.1f);
