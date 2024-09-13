@@ -4260,6 +4260,7 @@ GameObject:
   - component: {fileID: 695949409}
   - component: {fileID: 695949413}
   - component: {fileID: 695949412}
+  - component: {fileID: 695949414}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4574,6 +4575,19 @@ MonoBehaviour:
   moveSpeed: 3.5
   maxPos: 10.8
   minPos: -10.8
+--- !u!114 &695949414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695949402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7d787422ad1dcb48a72835a31e2a5b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 3
 --- !u!1 &722482139
 GameObject:
   m_ObjectHideFlags: 0
@@ -4589,7 +4603,7 @@ GameObject:
   - component: {fileID: 722482140}
   - component: {fileID: 722482145}
   - component: {fileID: 722482146}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Round monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
