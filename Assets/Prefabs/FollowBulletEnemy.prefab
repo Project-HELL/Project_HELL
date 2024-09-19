@@ -173,4 +173,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   attackDamage: 1
-  BulletObj: {fileID: 8979414807378132812, guid: 9b20bce4103a174408912150d099ad25, type: 3}
+  bulletObject: {fileID: 8979414807378132812, guid: 9b20bce4103a174408912150d099ad25, type: 3}

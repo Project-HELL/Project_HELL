@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FollowBulletMonster : BulletEnemyBase
+public class FollowBulletEnemy : BulletEnemyBase
 {
-    void OnTriggerEnter2D(Collider2D collision) // Ãß°İ ÅºÈ¯Çü ¸ó½ºÅÍ°¡ Hook¿¡ ¸ÂÀ» °æ¿ì »ç¶óÁü
+    void OnTriggerEnter2D(Collider2D collision) // ì¶”ê²© íƒ„í™˜í˜• ëª¬ìŠ¤í„°ê°€ Hookì— ë§ì„ ê²½ìš° ì‚¬ë¼ì§
     {
         if (collision.CompareTag("Hook"))
         {

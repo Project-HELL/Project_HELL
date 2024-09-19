@@ -7,14 +7,14 @@ public class BulletEnemyBase : EntityBase, Attackable, Falldownable
 {
     float timer = 0.0f;
     float offsetTime = 1.8f;
-    public GameObject BulletObj;
-    Transform Player;
+    public GameObject bulletObject;
+    Transform player;
     public override Vector2 MoveAI()
     {
-        Player = GameObject.Find("Player").GetComponent<Transform>();
-        if (Player != null)
+        player = GameObject.FindWithTag("Player").GetComponent<Transform>();
+        if (player != null)
         {
-            float targetX = transform.position.x - Player.position.x;
+            float targetX = transform.position.x - player.position.x;
             Vector3 targetPosition = Vector3.left * targetX * moveSpeed;
             return targetPosition * Time.deltaTime;
         }
@@ -26,7 +26,7 @@ public class BulletEnemyBase : EntityBase, Attackable, Falldownable
 
         if (timer > offsetTime)
         {
-            GameObject bullet = Instantiate(BulletObj, transform.position, transform.rotation);
+            GameObject bullet = Instantiate(bulletObject, transform.position, transform.rotation);
             Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
             timer = 0;
         }
