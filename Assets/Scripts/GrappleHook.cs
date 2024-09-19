@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -16,6 +17,9 @@ public class GrappleHook : MonoBehaviour
     public float maxDistance = 10f;
     // 훅을 타고 이동하는 속도.
     public float grappleMoveSpeed = 1f;
+
+    // 최대 속도
+    public float grappleMaxSpeed = 10f;
 
     // 훅이 걸리기 까지의 시간.
     public float grappleShootSpeed = 0.2f;
@@ -52,7 +56,7 @@ public class GrappleHook : MonoBehaviour
         }
 
         if (isGrappling) {
-            grappleStartedTime += Time.deltaTime / grappleShootSpeed;
+            grappleStartedTime += Time.deltaTime * grappleMoveSpeed;
             rigid.gravityScale = 0;
 
             line.SetPosition(0, playerPos);
@@ -61,10 +65,11 @@ public class GrappleHook : MonoBehaviour
             // gameObject.transform.position = Vector3.Lerp(playerPos, target, grappleStartedTime);
             // rigid.velocity = (target - (Vector2)playerPos).normalized * (/*Vector2.Distance(playerPos, target) * */grappleMoveSpeed + 1);
             rigid.AddForce((target - (Vector2)playerPos).normalized * grappleMoveSpeed * (grappleStartedTime + 1));
+            rigid.velocity = Vector2.Min(rigid.velocity, Vector2.one * grappleMaxSpeed);
 
             RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 0.5f, platformMask);
             Debug.DrawRay(transform.position, Vector2.up * 0.5f);
-            Debug.Log(hit.collider);
+            //Debug.Log(hit.collider);
             if (hit.collider != null) {
                 isGrappling = false;
                 line.enabled = false;
