@@ -57,7 +57,7 @@ public abstract class EntityBase : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<PlayerInfo>().Damege(attackDamage);
+            collision.gameObject.GetComponent<PlayerInfo>().Damage(attackDamage, collision.transform.position);
         }
     }
 }
