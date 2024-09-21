@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -17,6 +18,9 @@ public class GrappleHook : MonoBehaviour
     // 훅을 타고 이동하는 속도.
     public float grappleMoveSpeed = 1f;
 
+    // 최대 속도
+    public float grappleMaxSpeed = 10f;
+
     // 훅이 걸리기 까지의 시간.
     public float grappleShootSpeed = 0.2f;
     // 절벽을 오르기 까지의 시간.
@@ -24,12 +28,18 @@ public class GrappleHook : MonoBehaviour
 
     [HideInInspector] public bool isGrappling = false;
 
+
+    Rigidbody2D rigid;
+    float originGravity;
+
     Vector2 target;
     float grappleStartedTime = 0f;
 
+
     private void Awake()
     {
-        
+        rigid = GetComponent<Rigidbody2D>();
+        originGravity = rigid.gravityScale;
     }
 
     private void Update()
@@ -46,19 +56,33 @@ public class GrappleHook : MonoBehaviour
         }
 
         if (isGrappling) {
-            grappleStartedTime += Time.deltaTime / grappleShootSpeed;
+            grappleStartedTime += Time.deltaTime * grappleMoveSpeed;
+            rigid.gravityScale = 0;
 
             line.SetPosition(0, playerPos);
             line.SetPosition(1, target);
 
-            gameObject.transform.position = Vector3.Lerp(playerPos, target, grappleStartedTime);
+            // gameObject.transform.position = Vector3.Lerp(playerPos, target, grappleStartedTime);
+            // rigid.velocity = (target - (Vector2)playerPos).normalized * (/*Vector2.Distance(playerPos, target) * */grappleMoveSpeed + 1);
+            rigid.AddForce((target - (Vector2)playerPos).normalized * grappleMoveSpeed * (grappleStartedTime + 1));
+            rigid.velocity = Vector2.Min(rigid.velocity, Vector2.one * grappleMaxSpeed);
 
-            if (Vector2.Distance(playerPos, target) < 0.5f) {
-                // TODO: 수정예정.
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 0.5f, platformMask);
+            Debug.DrawRay(transform.position, Vector2.up * 0.5f);
+            //Debug.Log(hit.collider);
+            if (hit.collider != null) {
                 isGrappling = false;
                 line.enabled = false;
                 gameObject.transform.position = playerPos + Vector3.up * 1.5f;
             }
+
+            // if (Vector2.Distance(playerPos, target) < 0.5f) {
+            //     isGrappling = false;
+            //     line.enabled = false;
+            //     gameObject.transform.position = playerPos + Vector3.up * 1.5f;
+            // }
+        } else {
+            rigid.gravityScale = originGravity;
         }
     }
 
