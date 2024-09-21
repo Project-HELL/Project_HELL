@@ -74,4 +74,5 @@ crashlytics-build.properties
 # Ignore IDE Settings
 .idea
 .vscode
-.vsconfig
+*.vsconfig
+*.editorconfig
