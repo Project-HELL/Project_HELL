@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class BoneBlockFade : MonoBehaviour
+public class BonePlatform : MonoBehaviour
 {
     private Tilemap tilemap;
     private TilemapRenderer tilemapRenderer;
