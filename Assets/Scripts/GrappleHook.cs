@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -23,10 +24,12 @@ public class GrappleHook : MonoBehaviour
 
     // 훅이 걸리기 까지의 시간.
     public float grappleShootSpeed = 0.2f;
-    // 절벽을 오르기 까지의 시간.
-    public float climbSpeed = 0.1f;
+    public float animSpeed = 0.25f;
+
+    public AnimationCurve grappleFailAnim = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     [HideInInspector] public bool isGrappling = false;
+    [HideInInspector] public bool canGrapple = true;
 
 
     Rigidbody2D rigid;
@@ -46,12 +49,15 @@ public class GrappleHook : MonoBehaviour
     {
         Vector3 playerPos = gameObject.transform.position;
 
-        if (Input.GetMouseButtonDown(0)) {
+        if (canGrapple && Input.GetMouseButtonDown(0)) {
             ShootGrapple();
         }
 
         if (Input.GetMouseButtonUp(0)) {
             isGrappling = false;
+        }
+
+        if (!isGrappling && canGrapple) {
             line.enabled = false;
         }
 
@@ -87,14 +93,18 @@ public class GrappleHook : MonoBehaviour
     }
 
     private void ShootGrapple() {
+
+
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
 
         Vector2 direction = (Vector2)mousePosition - (Vector2)transform.position;
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, maxDistance, platformMask);
 
+        Debug.Log(hit.collider);
+
         // Grappleable 태그를 가지고 있는 플랫폼에 닿았는지 판별.
-        if (hit.collider.tag == "Grapplable") {
+        if (hit.collider != null && hit.collider.tag == "Grapplable") {
             target = hit.point;
 
             // init lineRenderer
@@ -102,6 +112,35 @@ public class GrappleHook : MonoBehaviour
             line.enabled = true;
 
             grappleStartedTime = 0f;
+        } else {
+            if (hit.collider != null) {
+                target = hit.point;
+            } else {
+                target = (Vector2)transform.position + (direction.normalized * Math.Min(maxDistance, direction.magnitude));
+            }
+
+            Debug.Log(target);
+            StartCoroutine(GrappleShotAnimation(target));
         }
+    }
+
+    IEnumerator GrappleShotAnimation(Vector2 point) {
+        canGrapple = false;
+
+        float time = 0;
+        line.enabled = true;
+        
+        while (time < animSpeed) {
+            yield return null;
+            Vector2 playerPos = gameObject.transform.position;
+
+            line.SetPosition(0, playerPos);
+            line.SetPosition(1, Vector2.Lerp(playerPos, target, grappleFailAnim.Evaluate(time / animSpeed)));
+
+            time += Time.deltaTime;
+        }
+
+        canGrapple = true;
+        line.enabled = false;
     }
 }
