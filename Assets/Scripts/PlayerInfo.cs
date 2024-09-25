@@ -7,6 +7,7 @@ public class PlayerInfo : MonoBehaviour
     public float hp;
     bool isHurt = false; // 피격 상태를 나타냄
     public float invincibleDuration = 2.0f; // 무적 상태 유지 시간 (2초)
+    private Animator anim;
 
     SpriteRenderer sr;
     Color halfA = new Color(1, 1, 1, 0.5f); // 투명하게 깜빡이는 효과를 위한 색상
@@ -18,7 +19,7 @@ public class PlayerInfo : MonoBehaviour
     {
         // SpriteRenderer 초기화
         sr = GetComponent<SpriteRenderer>();
-
+        anim = GetComponent<Animator>();
         if (sr == null)
         {
             Debug.LogError("SpriteRenderer가 오브젝트에 없습니다!");
@@ -39,6 +40,7 @@ public class PlayerInfo : MonoBehaviour
             if (hp <= 0)
             {
                 Debug.Log("플레이어의 체력이 다 소진되었습니다.");
+                anim.SetBool("isDie", true);
             }
             else
             {
@@ -57,6 +59,7 @@ public class PlayerInfo : MonoBehaviour
     IEnumerator Knockback(float dir)
     {
         isKnockback = true;
+        if (isHurt) anim.SetBool("isHit", true);
         float ctime = 0;
         while (ctime < 0.2f) // 0.2초 동안 넉백 효과
         {
@@ -69,6 +72,7 @@ public class PlayerInfo : MonoBehaviour
             yield return null;
         }
         isKnockback = false; // 넉백 상태 해제
+        anim.SetBool("isHit", false);
     }
 
     IEnumerator alphablink()

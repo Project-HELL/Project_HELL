@@ -4652,7 +4652,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 3
-  invincibleDuration: 2
+  invincibleDuration: 3
   speed: 0
 --- !u!1 &722482139
 GameObject:
